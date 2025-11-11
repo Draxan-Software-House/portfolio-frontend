@@ -12,9 +12,9 @@ export default function Nav() {
   }
 
   return (
-    <div className="navbar bg-base-100 shadow-md">
+    <div className="navbar bg-base-300 shadow-md">
       <div className="flex-1">
-        <Link to="/" className="btn btn-ghost normal-case text-xl">MyPortfolio</Link>
+        <Link to="/" className="btn btn-ghost normal-case text-xl text-accent">Home</Link>
       </div>
       <div className="flex-none gap-2">
         <Link to="/dashboard" className="btn btn-sm btn-outline">Dashboard</Link>
