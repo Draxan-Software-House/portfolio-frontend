@@ -13,7 +13,6 @@ function ProtectedRoute({ children }: Props){
     const token = localStorage.getItem('access_token');
     if (!token) {
       setAuthed(false);
-      setLoading(false);
       return;
     }
   

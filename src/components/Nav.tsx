@@ -12,14 +12,14 @@ export default function Nav() {
   }
 
   return (
-    <header className="bg-white shadow">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="text-lg font-semibold"><Link to="/">MyPortfolio</Link></div>
-        <nav className="space-x-4">
-          <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-          <button onClick={logout} className="ml-2 px-3 py-1 bg-red-500 text-white rounded">Logout</button>
-        </nav>
+    <div className="navbar bg-base-100 shadow-md">
+      <div className="flex-1">
+        <Link to="/" className="btn btn-ghost normal-case text-xl">MyPortfolio</Link>
       </div>
-    </header>
+      <div className="flex-none gap-2">
+        <Link to="/dashboard" className="btn btn-sm btn-outline">Dashboard</Link>
+        <button onClick={logout} className="btn btn-sm btn-error text-white">Logout</button>
+      </div>
+    </div>
   );
 };
