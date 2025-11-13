@@ -17,9 +17,12 @@
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
     "noUncheckedSideEffectImports": true
   },
   "include": ["vite.config.ts"]
