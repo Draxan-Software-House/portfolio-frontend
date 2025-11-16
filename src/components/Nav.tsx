@@ -1,15 +1,9 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { logoutClient } from '../auth/auth';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
 
-export default function Nav() {
-  const nav = useNavigate();
-
-  function logout() {
-    // call backend logout (optional) then remove token
-    logoutClient();
-    nav('/login');
-  }
+const Nav: React.FC = () => {
+  const { user, logout } = useAuth();
 
   return (
     <div className="navbar bg-base-300 shadow-md">
@@ -18,8 +12,23 @@ export default function Nav() {
       </div>
       <div className="flex-none gap-2">
         <Link to="/dashboard" className="btn btn-sm btn-outline">Dashboard</Link>
-        <button onClick={logout} className="btn btn-sm btn-error text-white">Logout</button>
+        {user ? (
+          <>
+            <span className="text-sm text-base-content">
+              {user.name || "User"}
+            </span>
+            <button onClick={logout} className="btn btn-outline btn-error btn-sm">
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link to="/login" className="btn btn-info btn-sm">
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
 };
+
+export default Nav;
