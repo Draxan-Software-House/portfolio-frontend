@@ -1,67 +1,69 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { login } from '../auth/auth';
-import Loader from '../components/Loader';
+import { useNavigate, Navigate } from "react-router-dom";
+import { useAuth } from "../context/useAuth";
+import { authService } from '../auth/auth';
 
-function Login() {
-  const [email, setEmail] = useState('admin@example.com');
-  const [password, setPassword] = useState('admin123');
-  const [error, setError] = useState('');
+const Login:React.FC = () => {
+  const { user, token, login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
+  const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  // Redirect if already logged in
+  if (user && token) return <Navigate to="/dashboard" replace />;
+  
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    try {
-      await login(email, password);
-      nav('/dashboard');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+    try{
+      const res = await authService.login(email, password);
+      login(res.data.user,res.data.token);
+      navigate('/dashboard');
+    }catch{
+      setError("Invalid credentials");
     } finally {
       setLoading(false);
     }
   }
 
-  if (loading) return <Loader text="Signing in..." />;
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-base-200">
-      <form onSubmit={handleSubmit} className="card w-full max-w-sm bg-base-100 shadow-md p-6">
-        <h2 className="text-xl font-bold mb-4 text-center">Sign In</h2>
-
-        <label className="form-control mb-3">
-          <span className="label-text">Email</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="input input-bordered"
-            required
-          />
-        </label>
-
-        <label className="form-control mb-4">
-          <span className="label-text">Password</span>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="input input-bordered"
-            required
-          />
-        </label>
-
-        {error && <p className="text-error text-sm mb-2">{error}</p>}
-
-        <button type="submit" className="btn btn-primary w-full">
+      <form onSubmit={handleLogin}
+        className="card w-96 shadow-xl bg-base-100 p-6 space-y-4">
+        <h2 className="text-2xl font-bold text-center text-primary">
           Login
+        </h2>
+
+        {error && <div className="text-error text-sm">{error}</div>}
+
+        <input
+          type="email"
+          placeholder="Email"
+          className="input input-bordered w-full"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          className="input input-bordered w-full"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit" className="btn btn-info w-full" disabled={loading} >
+          {loading ? ( <span className="loading loading-spinner text-primary" /> ) : 
+          ( "Login" )}
         </button>
       </form>
     </div>
   );
-};
+}
 
 export default Login;
